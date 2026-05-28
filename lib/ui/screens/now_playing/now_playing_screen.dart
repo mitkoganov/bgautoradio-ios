@@ -126,26 +126,32 @@ class _NowPlayingContent extends StatelessWidget {
             spacing: 8,
             children: [
               if (station.city != null)
-                Chip(
-                  label: Text(station.city!),
-                  backgroundColor: AppColors.surfaceCard,
-                  labelStyle: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
-                ),
-              Chip(
-                label: Text(station.category.displayName),
-                backgroundColor: AppColors.surfaceCard,
-                labelStyle: const TextStyle(color: AppColors.brandTeal, fontSize: 12),
-              ),
+                _InfoChip(label: station.city!, color: AppColors.textSecondary),
+              _InfoChip(label: station.category.displayName, color: AppColors.brandTeal),
               if (station.bitrate != null)
-                Chip(
-                  label: Text('${station.bitrate}kbps'),
-                  backgroundColor: AppColors.surfaceCard,
-                  labelStyle: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
-                ),
+                _InfoChip(label: '${station.bitrate}kbps', color: AppColors.textSecondary),
             ],
           ),
         ],
       ),
+    );
+  }
+}
+
+class _InfoChip extends StatelessWidget {
+  final String label;
+  final Color color;
+  const _InfoChip({required this.label, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceElevated,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(label, style: TextStyle(color: color, fontSize: 12)),
     );
   }
 }

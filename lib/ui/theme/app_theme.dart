@@ -36,6 +36,11 @@ ThemeData buildDarkTheme() {
       color: AppColors.surfaceCard,
       elevation: 2,
     ),
+    chipTheme: const ChipThemeData(
+      backgroundColor: AppColors.surfaceElevated,
+      labelStyle: TextStyle(color: AppColors.textPrimary),
+      side: BorderSide.none,
+    ),
     useMaterial3: true,
   );
 }
@@ -47,6 +52,11 @@ ThemeData buildLightTheme() {
       primary: AppColors.brandTeal,
       surface: Colors.grey[100]!,
       onPrimary: Colors.white,
+    ),
+    chipTheme: ChipThemeData(
+      backgroundColor: Colors.grey[800]!,
+      labelStyle: const TextStyle(color: Colors.white),
+      side: BorderSide.none,
     ),
     useMaterial3: true,
   );
