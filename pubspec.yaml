@@ -1,0 +1,59 @@
+name: bulgarian_auto_radio
+description: Bulgarian Auto Radio - stream Bulgarian radio stations on iPhone and CarPlay
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # Audio playback — background audio, ICY metadata, lock screen controls
+  just_audio: ^0.10.5
+  audio_service: ^0.18.18
+  audio_session: ^0.1.21
+
+  # HTTP & JSON
+  http: ^1.2.2
+  json_annotation: ^4.9.0
+
+  # Local SQLite database
+  sqflite: ^2.4.2
+  path: ^1.9.0
+
+  # State management
+  provider: ^6.1.2
+
+  # Image loading & caching
+  cached_network_image: ^3.4.1
+
+  # Shared preferences (app settings)
+  shared_preferences: ^2.3.2
+
+  # Network connectivity check
+  connectivity_plus: ^6.1.1
+
+  # CarPlay (iOS only)
+  flutter_carplay: ^1.3.3
+
+  # Utilities
+  intl: ^0.20.2
+  collection: ^1.19.1
+  uuid: ^4.5.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.13
+  json_serializable: ^6.8.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/data/bulgarian_radio_stations.json
+    - assets/images/
