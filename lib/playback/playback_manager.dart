@@ -17,10 +17,9 @@ class PlaybackManager extends ChangeNotifier {
   StreamSubscription? _mediaSub;
 
   PlaybackManager({
-    required RadioAudioHandler handler,
-    required RadioRepository repository,
-  })  : _handler = handler,
-        _repository = repository {
+    required this._handler,
+    required this._repository,
+  }) {
     _playbackSub = _handler.playbackState.listen(_onPlaybackState);
     _mediaSub = _handler.mediaItem.listen(_onMediaItem);
   }

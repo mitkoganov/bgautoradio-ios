@@ -25,8 +25,8 @@ class StationLogo extends StatelessWidget {
             ? CachedNetworkImage(
                 imageUrl: logoUrl!,
                 fit: BoxFit.contain,
-                placeholder: (_, __) => _placeholder(),
-                errorWidget: (_, __, ___) => _placeholder(),
+                placeholder: (_, _) => _placeholder(),
+                errorWidget: (_, _, _) => _placeholder(),
               )
             : _placeholder(),
       ),

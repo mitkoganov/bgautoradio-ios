@@ -36,7 +36,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             subtitle: const Text('Пусни последната станция при отваряне',
                 style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
             value: _autoPlay,
-            activeColor: AppColors.brandTeal,
+            activeThumbColor: AppColors.brandTeal,
             onChanged: (v) {
               setState(() => _autoPlay = v);
               _prefs.autoPlayOnStart = v;
@@ -44,21 +44,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           const Divider(color: AppColors.surfaceElevated),
           const _SectionHeader('Тема'),
-          for (final option in const [
-            ('auto', 'Авто (системна)'),
-            ('dark', 'Тъмна'),
-            ('light', 'Светла'),
-          ])
-            ListTile(
-              title: Text(option.$2, style: const TextStyle(color: AppColors.textPrimary)),
-              leading: Radio<String>(
-                value: option.$1,
-                groupValue: _theme,
-                activeColor: AppColors.brandTeal,
-                onChanged: (v) => _setTheme(v!),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: SegmentedButton<String>(
+              segments: const [
+                ButtonSegment(value: 'auto', label: Text('Авто')),
+                ButtonSegment(value: 'dark', label: Text('Тъмна')),
+                ButtonSegment(value: 'light', label: Text('Светла')),
+              ],
+              selected: {_theme},
+              onSelectionChanged: (s) => _setTheme(s.first),
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
+                        ? AppColors.brandTeal
+                        : AppColors.surfaceCard),
+                foregroundColor: WidgetStateProperty.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
+                        ? Colors.black
+                        : AppColors.textPrimary),
               ),
-              onTap: () => _setTheme(option.$1),
             ),
+          ),
           const Divider(color: AppColors.surfaceElevated),
           const _SectionHeader('За приложението'),
           ListTile(

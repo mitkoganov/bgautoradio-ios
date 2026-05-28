@@ -13,12 +13,10 @@ class RadioRepository {
   final AppPreferences _prefs;
 
   RadioRepository({
-    required RadioDatabase db,
-    required StationApiService api,
-    required AppPreferences prefs,
-  })  : _db = db,
-        _api = api,
-        _prefs = prefs;
+    required this._db,
+    required this._api,
+    required this._prefs,
+  });
 
   Future<void> initializeCatalog() async {
     await _seedFromAssetIfNeeded();

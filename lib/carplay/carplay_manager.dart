@@ -13,10 +13,9 @@ class CarPlayManager {
   CPListTemplate? _favoritesTemplate;
 
   CarPlayManager({
-    required RadioRepository repository,
-    required PlaybackManager playback,
-  })  : _repository = repository,
-        _playback = playback;
+    required this._repository,
+    required this._playback,
+  });
 
   void initialize() {
     if (defaultTargetPlatform != TargetPlatform.iOS) return;

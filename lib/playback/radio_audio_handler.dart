@@ -14,7 +14,7 @@ class RadioAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler 
     _player.playerStateStream.listen((state) {
       if (state.processingState == ProcessingState.idle &&
           _currentStation != null &&
-          this.playbackState.value.playing) {
+          playbackState.value.playing) {
         _scheduleReconnect();
       }
     });
