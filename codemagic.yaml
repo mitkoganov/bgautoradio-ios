@@ -1,6 +1,50 @@
 workflows:
+  ios-sideloadly:
+    name: iOS Unsigned IPA (за Sideloadly)
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+
+    environment:
+      flutter: 3.44.0
+      xcode: latest
+      cocoapods: default
+
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: 'main'
+          include: true
+
+    scripts:
+      - name: Get Flutter packages
+        script: flutter pub get
+
+      - name: Flutter analyze
+        script: flutter analyze --no-fatal-infos
+
+      - name: Run tests
+        script: flutter test
+
+      - name: Build iOS (без подписване)
+        script: |
+          flutter build ios \
+            --release \
+            --no-codesign
+
+      - name: Пакетирай .app → .ipa
+        script: |
+          mkdir -p build/ios/ipa/Payload
+          cp -r build/ios/iphoneos/Runner.app build/ios/ipa/Payload/
+          cd build/ios/ipa
+          zip -r BulgarianAutoRadio.ipa Payload
+          echo "IPA size: $(du -sh BulgarianAutoRadio.ipa)"
+
+    artifacts:
+      - build/ios/ipa/BulgarianAutoRadio.ipa
+
   ios-release:
-    name: iOS Release Build
+    name: iOS Release (App Store — платен акаунт)
     max_build_duration: 60
     instance_type: mac_mini_m2
 
@@ -9,18 +53,10 @@ workflows:
       xcode: latest
       cocoapods: default
       groups:
-        - app_store_credentials    # APP_STORE_CONNECT_API_KEY_KEY_ID, ISSUER_ID, KEY
-        - certificate_credentials  # CERTIFICATE_PRIVATE_KEY, CERTIFICATE_PASSWORD
+        - app_store_credentials
+        - certificate_credentials
       vars:
         BUNDLE_ID: "com.bgautoradio.ios"
-        APP_STORE_APPLE_ID: "XXXXXXXXXX"  # replace with your Apple App ID
-
-    triggering:
-      events:
-        - push
-      branch_patterns:
-        - pattern: 'main'
-          include: true
 
     scripts:
       - name: Set up code signing
@@ -36,12 +72,6 @@ workflows:
       - name: Get Flutter packages
         script: flutter pub get
 
-      - name: Flutter analyze
-        script: flutter analyze --no-fatal-infos
-
-      - name: Run tests
-        script: flutter test
-
       - name: Build iOS
         script: |
           flutter build ipa \
@@ -50,8 +80,6 @@ workflows:
 
     artifacts:
       - build/ios/ipa/*.ipa
-      - /tmp/xcodebuild_logs/*.log
-      - flutter_drive.log
 
     publishing:
       app_store_connect:
@@ -59,41 +87,3 @@ workflows:
         key_id: $APP_STORE_CONNECT_API_KEY_KEY_ID
         issuer_id: $APP_STORE_CONNECT_API_KEY_ISSUER_ID
         submit_to_testflight: true
-        beta_groups:
-          - "External Testers"
-
-  ios-debug:
-    name: iOS Debug Build (no signing)
-    max_build_duration: 30
-    instance_type: mac_mini_m2
-
-    environment:
-      flutter: 3.44.0
-      xcode: latest
-      cocoapods: default
-
-    triggering:
-      events:
-        - pull_request
-      branch_patterns:
-        - pattern: '*'
-          include: true
-
-    scripts:
-      - name: Get Flutter packages
-        script: flutter pub get
-
-      - name: Flutter analyze
-        script: flutter analyze --no-fatal-infos
-
-      - name: Run tests
-        script: flutter test
-
-      - name: Build iOS (no codesign)
-        script: |
-          flutter build ios \
-            --debug \
-            --no-codesign
-
-    artifacts:
-      - build/ios/iphoneos/Runner.app
