@@ -15,7 +15,13 @@ class RadioAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler 
       if (state.processingState == ProcessingState.idle &&
           _currentStation != null &&
           playbackState.value.playing) {
-        _scheduleReconnect();
+        // Debounce: wait 2s before reconnecting to avoid thrashing on brief interruptions
+        _reconnectTimer?.cancel();
+        _reconnectTimer = Timer(const Duration(seconds: 2), () {
+          if (_currentStation != null && playbackState.value.playing) {
+            _scheduleReconnect();
+          }
+        });
       }
     });
     _player.icyMetadataStream.listen((meta) {
